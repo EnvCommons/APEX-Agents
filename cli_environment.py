@@ -103,7 +103,7 @@ class CLIEnvironment(Environment):
             search_path = params.path or "."
 
             # Use find with glob pattern
-            cmd = f"find {search_path} -name '{params.pattern}' -type f | sort"
+            cmd = f"find '{search_path}' -name '{params.pattern}' -type f | sort"
 
             output, code = await self.sandbox.run(cmd)
             
@@ -128,9 +128,9 @@ class CLIEnvironment(Environment):
             search_path = params.path or "."
 
             if params.include:
-                cmd = f"find {search_path} -name '{params.include}' -type f -exec grep -Hn '{params.pattern}' {{}} \\;"
+                cmd = f"find '{search_path}' -name '{params.include}' -type f -exec grep -Hn '{params.pattern}' {{}} \\;"
             else:
-                cmd = f"grep -r -n '{params.pattern}' {search_path}"
+                cmd = f"grep -r -n '{params.pattern}' '{search_path}'"
 
             output, code = await self.sandbox.run(cmd)
             
@@ -151,7 +151,7 @@ class CLIEnvironment(Environment):
     async def ls(self, params: LSParams) -> ToolOutput:
         """List files and directories using computer instance."""
         try:
-            cmd = f"ls -la {params.path}"
+            cmd = f"ls -la '{params.path}'"
             output, code = await self.sandbox.run(cmd)
             
             return ToolOutput(
@@ -173,13 +173,13 @@ class CLIEnvironment(Environment):
         try:
             if params.offset and params.limit:
                 end_line = params.offset + params.limit
-                cmd = f"sed -n '{params.offset},{end_line}p' {params.file_path} | cat -n"
+                cmd = f"sed -n '{params.offset},{end_line}p' '{params.file_path}' | cat -n"
                 output, code = await self.sandbox.run(cmd)
             elif params.offset:
-                cmd = f"tail -n +{params.offset} {params.file_path} | cat -n"
+                cmd = f"tail -n +{params.offset} '{params.file_path}' | cat -n"
                 output, code = await self.sandbox.run(cmd)
             elif params.limit:
-                cmd = f"head -n {params.limit} {params.file_path} | cat -n"
+                cmd = f"head -n {params.limit} '{params.file_path}' | cat -n"
                 output, code = await self.sandbox.run(cmd)
             else:
                 content = await download_text(self.sandbox, params.file_path)
@@ -208,7 +208,7 @@ class CLIEnvironment(Environment):
             # Create directory if needed
             dir_name = os.path.dirname(params.file_path)
             if dir_name:
-                await self.sandbox.run(f"mkdir -p {dir_name}")
+                await self.sandbox.run(f"mkdir -p '{dir_name}'")
 
             await upload_text(
                 self.sandbox,
@@ -241,12 +241,12 @@ class CLIEnvironment(Environment):
                 # Replace all occurrences
                 escaped_old = params.old_string.replace('/', '\\/')
                 escaped_new = params.new_string.replace('/', '\\/')
-                cmd = f"sed -i 's/{escaped_old}/{escaped_new}/g' {params.file_path}"
+                cmd = f"sed -i 's/{escaped_old}/{escaped_new}/g' '{params.file_path}'"
             else:
                 # Replace first occurrence only
                 escaped_old = params.old_string.replace('/', '\\/')
                 escaped_new = params.new_string.replace('/', '\\/')
-                cmd = f"sed -i 's/{escaped_old}/{escaped_new}/' {params.file_path}"
+                cmd = f"sed -i 's/{escaped_old}/{escaped_new}/' '{params.file_path}'"
 
             output, code = await self.sandbox.run(cmd)
             

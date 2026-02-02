@@ -8,7 +8,7 @@ from typing import Any
 import openai
 from openreward.environments import JSONObject, TextBlock, ToolOutput, tool
 from openreward import AsyncOpenReward, SandboxBucketConfig, SandboxSettings
-from openreward.toolsets import WordToolset, PDFToolset
+from openreward.toolsets import WordToolset, PDFToolset, ExcelToolset, PowerPointToolset
 from pydantic import BaseModel, Field
 
 from cli_environment import CLIEnvironment
@@ -53,7 +53,7 @@ class ApexAgents(CLIEnvironment):
     Tasks require multi-turn interaction with file exploration and creation.
     Evaluation uses LLM-based rubric grading with binary criteria.
     """
-    toolsets = [WordToolset, PDFToolset]
+    toolsets = [WordToolset, PDFToolset, ExcelToolset, PowerPointToolset]
 
     def __init__(self, task_spec: JSONObject, secrets: dict[str, str] = {}) -> None:
         super().__init__(task_spec, secrets=secrets)
@@ -108,6 +108,14 @@ class ApexAgents(CLIEnvironment):
             print("[SETUP SUCCESS] poppler-utils installed successfully")
         else:
             print(f"[SETUP WARNING] poppler-utils installation exited with code {exit_code}")
+            print(f"Output: {output}")
+
+        output, exit_code = await self.sandbox.run("pip3 install -q openpyxl")
+
+        if exit_code == 0:
+            print("[SETUP SUCCESS] openpyxl installed successfully")
+        else:
+            print(f"[SETUP WARNING] openpyxl installation exited with code {exit_code}")
             print(f"Output: {output}")
 
         # Install PDF manipulation libraries
