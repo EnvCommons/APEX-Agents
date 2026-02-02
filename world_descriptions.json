@@ -1,0 +1,1470 @@
+[
+  {
+    "world_id": "world_9797d81fa71c4dbfb192e89a0f2ac811",
+    "world_name": "Law World 416",
+    "world_description": "Advise TAC’s board on mitigating and disclosing the financial and legal impacts of U.S. auto tariffs by analyzing supply chain contractual risk, SEC disclosure obligations, and the legality of the tariffs, supported by internal and external legal memoranda.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_5970ed13783a463181bdf38337f0cad1",
+    "world_name": "Investment Banking World 246",
+    "world_description": "Development of strategic investment rationale, assessment of risks and opportunities and analysis of key pro forma valuation and growth metrics ahead of a potential acquisition.",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_f5802ff259f6474b8f27bd11cd42e4fe",
+        "service_name": "Edgar SEC"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_0f1a736de09143968916bf5816b9b36c",
+        "service_name": "FMP"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_9b5ff332b34545a6aa211c5cab8a2dab",
+    "world_name": "Management Consulting World 131",
+    "world_description": "Transmission network resilience and modernisation strategy",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_941eba667ba842f59662864b13b0554b",
+    "world_name": "Management Consulting World 128",
+    "world_description": "Amensa Global is evaluating strategic options for several projects that are currently incurring significant losses.",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_4c8dea260e674f37abc700d5ac09fff9",
+    "world_name": "Law World 419",
+    "world_description": "The M/V Red Room, a Panamanian-flagged tanker charted by a US-based energy company, strikes a submerged object on the bed of the Ohio River as it approaches a terminal operated by Black Lodge Petroleum Logistics (BLPL), whom the chartering company now seeks to hold responsible for the cost of cleanup of 180,000 gallons of crude in a joint action in federal district court it brought with the United States of America.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_075ef4dff46146a580c8522e2ad29cb3",
+    "world_name": "Management Consulting World 129",
+    "world_description": "A US based SaaS company needs to redesign its pricing and packaging model to increase revenue per customer without eroding retention",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_bc99fdca9e3b4ab99233d4d1c3e8b153",
+    "world_name": "Investment Banking World 225",
+    "world_description": "Iron Mountain conversion from a normal company to a REIT (Real Estate Investment Trust)",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_5859ae30d8744ae782a778a39af37853",
+    "world_name": "Investment Banking World 224",
+    "world_description": "Vista has engaged a leading IB to provide advisory in taking Elastic private",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_2f84c98bb6ca4644937fa4f47b460c57",
+    "world_name": "Management Consulting World 135",
+    "world_description": "Develop growth strategy and customer segmentation plan for a fast growing beauty brand and deliver a 3-year roadmap",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_802bca9c604244748d866ba9dde7decf",
+    "world_name": "Investment Banking World 226",
+    "world_description": "A large cap private equity firm is assessing taking Planet Fitness private",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_1e4d4288e63f4a08851a3cc441eb3ccb",
+    "world_name": "Investment Banking World 219",
+    "world_description": "Negotiate the key terms, payment structure, and risk allocation of the take-private deal between the publicly traded investment management firm and prospective tier-one buyers.",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_95fe2c7d53ae4120b830d30539506334",
+    "world_name": "Law World 425",
+    "world_description": "Tax diligence and structuring analysis for a private equity acquisition of a privately held S corporation with potential historical S-status defects.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_e9f523e7a94f45e2bc7ff7b649943e33",
+    "world_name": "Investment Banking World 227",
+    "world_description": "Develop a viable take private strategy for the Muskrat Falls hydro project after the Canadian government decided to end their sovereign guarantee for their approximately $13 billion CAD of debt.",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_43a921f91f0f4d2c85d8bd2774f9e681",
+    "world_name": "Investment Banking World 244",
+    "world_description": "Conduct leveraged buyout financial analysis for the private equity buyer of the EdTech target, confirming leverage capacity, assessing IRR returns, and modeling cost synergies and integration complexity.",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_f5802ff259f6474b8f27bd11cd42e4fe",
+        "service_name": "Edgar SEC"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_0f1a736de09143968916bf5816b9b36c",
+        "service_name": "FMP"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_4120432b49c54a82bb938c46ad274f18",
+    "world_name": "Management Consulting World 130",
+    "world_description": "A mid sized US food manufacturer is launching a digital transformation program to modernize its operations, improve forecasting accuracy, and reduce plant downtime",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_7cabc3536d2d45f3aa32634046c85921",
+    "world_name": "Investment Banking World 228",
+    "world_description": "A strategic paper and packaging company approaches a target with an offer to buy.",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_10631647211d4c2080c5774c0ac1224e",
+    "world_name": "Law World 421",
+    "world_description": "Identify the comprehensive federal and state regulatory framework governing telemarketing programs for the specialized finance lender, detailing applicable laws, overseeing agencies, and inherent risks before implementation",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_eec3883ca3c54c41a62d3f220a27736c",
+    "world_name": "Law World 431",
+    "world_description": "Draft and negotiate a commercial office lease and ancillary documents for a Southern California property owner leasing approximately 15,000 square feet in an Irvine high-rise",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_d1b705c7393b40f9bb5e01bb63b99b91",
+    "world_name": "Management Consulting World 112.1",
+    "world_description": "Following the achievement of the initial 20% cost-savings target, the engagement extension focuses on validating realized savings and driving sustained operational excellence through network-level optimization and continuous improvement across the manufacturing footprint.",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_d5110661c46c42a6bb952e6f6bd89967",
+    "world_name": "Management Consulting World 132",
+    "world_description": "A US based consumer wellness company wants to identify and prioritize new markets for expansion as part of a five year growth plan",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_ac4631be289645f2ae7db48b1bd442d0",
+    "world_name": "Law World 434",
+    "world_description": "A U.S. private equity fund pursuing a Hong Kong/Singapore self-storage roll-up faces complex land-use issues, cross-border regulatory approvals, financing structuring challenges, investor demands, and major operational-integration risks across two highly regulated markets.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_d6c01a12c619445f8a9dda1973432337",
+    "world_name": "Management Consulting World 133",
+    "world_description": "A Major US hotel group is facing declining loyalty program engagement and needs to redesign its rewards model using customer insights and financial modeling",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_06051b9b10c94c079db1bac3b70c4c4b",
+    "world_name": "Law World 433",
+    "world_description": "Senior living facility corporation is experiencing cutbacks that result in negative outcomes for clients & families of clients",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_848bb733fcc544a3b9ef5b0ea7ab67ae",
+    "world_name": "Law World 415",
+    "world_description": "Provide CrowdStrike’s board with a legal update and risk assessment following the July 2024 outage by summarizing ongoing litigation, reviewing standard customer contracts, and outlining potential exposure to additional customer and shareholder claims.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_aa672f35da64403f81004c0223f26a01",
+    "world_name": "Law World 418",
+    "world_description": " LNG vessels (“LNG Shipping Inc”) and a New York based private equity fund (“BlueAnchor Capital Fund I LP”) are forming a joint venture to own, finance and operate a fleet of LNG carriers",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_767c001731ba4316a35908dbb107cf85",
+    "world_name": "Investment Banking World 223",
+    "world_description": "3M is evaluating different strategic alternatives for its remaining stake in Solventum, including a buyback, increasing ownership or fully exiting their position",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_e81842899beb4631b2e07feafb4018dd",
+    "world_name": "Law World 417",
+    "world_description": "Guide the ChasingStreams, LLC and ParaZon Studios through the last few stages of the proposed transaction.",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_85a3713cd2794fdfb56e92161325a00e",
+    "world_name": "Law World 420",
+    "world_description": "Assess off-label promotion risks for pharmaceutical company",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_2a87e5cb5583475b820be279f6f46df6",
+    "world_name": "Management Consulting World 127",
+    "world_description": "One of the leading European automotive supplier needs help navigating the EV transition by defining its component portfolio strategy by 2030",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_f83f49b3776b4b5e870c36091f7e2b0b",
+    "world_name": "Investment Banking World 221",
+    "world_description": "Barings BDC, Inc. is considering the takeover of a competitor called TPVG",
+    "domain": "Investment Banking",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_c0821d23e38342e9b9eeef5680a4fb69",
+    "world_name": "Management Consulting World 134",
+    "world_description": "A private equity firm is evaluating a potential acquisition of a SaaS company providing workforce compliance management software for industrial employers",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_72e117e476674c6db7f16db331644d9f",
+    "world_name": "Law World 423",
+    "world_description": "Conduct a full GDPR compliance assessment for the mid-sized US software provider, focusing on international data transfers, vendor management controls, incident response obligations, and readiness for supervisory authority engagement",
+    "domain": "Law",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  },
+  {
+    "world_id": "world_0f65ffc105a74cc79a207cbe7a2aff87",
+    "world_name": "Management Consulting World 113.1",
+    "world_description": "Following the initial valuation review and divestment planning, the engagement extension focuses on building a forward-looking, scenario-based portfolio reallocation framework that integrates ESG and regulatory risk to support risk-adjusted, sustainability-aligned investment decisions.",
+    "domain": "Management Consulting",
+    "apps": [
+      {
+        "service_id": "svc_a3ac7e47956c43048235dbd25d8c849d",
+        "service_name": "Calendar"
+      },
+      {
+        "service_id": "svc_eec407c6dffc45579b7a4025f8439fe2",
+        "service_name": "Chat"
+      },
+      {
+        "service_id": "svc_bd6a6280b337424cb5e6e4959301520f",
+        "service_name": "Code Execution"
+      },
+      {
+        "service_id": "svc_2293fbde36334312996ecfeaca4e978b",
+        "service_name": "Excel"
+      },
+      {
+        "service_id": "svc_aba5e37188c745fba2bbd575545a9743",
+        "service_name": "Filesystem"
+      },
+      {
+        "service_id": "svc_56aff339e48c4f0aaa111988ca7c0b12",
+        "service_name": "Mail"
+      },
+      {
+        "service_id": "svc_bd0089edc9eb45df9b459b7b9d47f44f",
+        "service_name": "PDFs"
+      },
+      {
+        "service_id": "svc_8361cf10b2f84ed78225902d0a6a4255",
+        "service_name": "Powerpoint"
+      },
+      {
+        "service_id": "svc_5d56252d4260473284737585ad91eeb3",
+        "service_name": "Word"
+      }
+    ]
+  }
+]
