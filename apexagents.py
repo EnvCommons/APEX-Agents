@@ -94,6 +94,9 @@ class ApexAgents(CLIEnvironment):
         # Track submission state
         self.submitted = False
 
+        # Track whether task-specific files exist and were uploaded
+        self.task_files_exist = False
+
     async def setup(self) -> None:
         """Start sandbox and install python-pptx, python-docx, openpyxl, and PDF libraries for PowerPoint, Word, Excel, and PDF tools"""
         await self.sandbox.start()
@@ -128,6 +131,34 @@ class ApexAgents(CLIEnvironment):
             print(f"[SETUP WARNING] PDF libraries installation exited with code {exit_code}")
             print(f"Output: {output}")
 
+        # Upload task-specific files if they exist
+        task_files_source = Path(PATH) / "task_files" / self.validated.task_id / "filesystem"
+
+        if task_files_source.exists() and task_files_source.is_dir():
+            print(f"[SETUP] Uploading task-specific files for {self.validated.task_id}...")
+
+            try:
+                file_count = 0
+                for file_path in task_files_source.rglob("*"):
+                    if file_path.is_file():
+                        # Calculate relative path to preserve directory structure
+                        relative_path = file_path.relative_to(task_files_source)
+                        remote_path = f"/orwd_data/task_files/{relative_path}"
+
+                        # Upload file to sandbox
+                        await self.sandbox.upload(str(file_path), remote_path)
+                        file_count += 1
+
+                print(f"[SETUP SUCCESS] Uploaded {file_count} task files to /orwd_data/task_files/")
+                self.task_files_exist = True
+
+            except Exception as e:
+                print(f"[SETUP WARNING] Failed to upload task files: {str(e)}")
+                self.task_files_exist = False
+        else:
+            print(f"[SETUP] No task-specific files found for {self.validated.task_id}")
+            self.task_files_exist = False
+
     async def get_prompt(self) -> list[TextBlock]:
         """Return task prompt with sandbox context and submission instructions."""
         base_prompt = self.task_data["prompt"]
@@ -140,6 +171,12 @@ ENVIRONMENT INFORMATION:
 - Task-specific files are mounted at: /orwd_data/
 - You can use the tools available to help solve the task
 """
+
+        # Add task files information if they exist
+        if self.task_files_exist:
+            sandbox_info += """
+- Additional task files are available at: /orwd_data/task_files/
+- Use CLI tools (ls, read, grep, etc.) to explore these files"""
 
         # Add submission instructions based on expected output
         if self.task_data["expected_output"] == "message_in_console":
