@@ -11,7 +11,7 @@ from openreward import AsyncOpenReward, SandboxBucketConfig, SandboxSettings
 from openreward.toolsets import WordToolset, PDFToolset, ExcelToolset, PowerPointToolset
 from pydantic import BaseModel, Field
 
-from cli_environment import CLIEnvironment
+from cli_environment import CLIEnvironment, ReadParams
 
 # Data path in production (mounted via bucket config)
 import os
@@ -78,8 +78,8 @@ class ApexAgents(CLIEnvironment):
         # Configure sandbox
         self.sandbox_settings = SandboxSettings(
             environment="GeneralReasoning/APEX-Agents",
-            image="generalreasoning/python-ds:3.12-tools",
-            machine_size="0.5:0.5",
+            image="generalreasoning/knowledge-worker",
+            machine_size="2:2",
             block_network=False,
             bucket_config=SandboxBucketConfig(
                 mount_path="/orwd_data",
@@ -94,39 +94,104 @@ class ApexAgents(CLIEnvironment):
         # Track submission state
         self.submitted = False
 
+        # Track whether task-specific files exist and were uploaded
+        self.task_files_exist = False
+
     async def setup(self) -> None:
         """Start sandbox and install python-pptx, python-docx, openpyxl, and PDF libraries for PowerPoint, Word, Excel, and PDF tools"""
         await self.sandbox.start()
-        # Install python-docx
-        output, exit_code = await self.sandbox.run("pip3 install -q python-docx")
+      
+        # Upload task-specific files if they exist
+        task_files_source = Path(PATH) / "task_files" / self.validated.task_id / "filesystem"
 
-        # Install poppler-utils (system dependency for PDF rendering)
-        print("[SETUP] Installing poppler-utils for PDF rendering...")
-        output, exit_code = await self.sandbox.run("apt-get update && apt-get install -y poppler-utils")
+        if task_files_source.exists() and task_files_source.is_dir():
+            print(f"[SETUP] Uploading task-specific files for {self.validated.task_id}...")
 
-        if exit_code == 0:
-            print("[SETUP SUCCESS] poppler-utils installed successfully")
+            # Create base directory for task files in writable location
+            output, exit_code = await self.sandbox.run("mkdir -p /home/ubuntu/task_files")
+            if exit_code != 0:
+                print(f"[SETUP WARNING] Failed to create task_files directory: {output}")
+                self.task_files_exist = False
+                return
+
+            file_count = 0
+            for file_path in task_files_source.rglob("*"):
+                if file_path.is_file():
+                    # Calculate relative path to preserve directory structure
+                    relative_path = file_path.relative_to(task_files_source)
+                    remote_path = f"/home/ubuntu/task_files/{relative_path}"
+
+                    # Create parent directory (use single quotes to handle spaces safely)
+                    parent_dir = str(Path(remote_path).parent)
+                    output, exit_code = await self.sandbox.run(f"mkdir -p '{parent_dir}'")
+
+                    if exit_code != 0:
+                        print(f"[SETUP WARNING] Failed to create directory {parent_dir}: {output}")
+                        continue
+
+                    # Upload to temp location (no spaces), then move to final destination
+                    # This works around sandbox.upload() not quoting paths with spaces
+                    try:
+                        temp_path = f"/tmp/upload_{hash(str(file_path))}.tmp"
+                        await self.sandbox.upload(str(file_path), temp_path)
+
+                        # Move to final destination with proper quoting
+                        # Escape single quotes in the path for bash
+                        escaped_remote = remote_path.replace("'", "'\\''")
+                        output, exit_code = await self.sandbox.run(f"mv '{temp_path}' '{escaped_remote}'")
+
+                        if exit_code != 0:
+                            print(f"[SETUP WARNING] Failed to move {file_path.name} to final location: {output}")
+                            continue
+
+                        file_count += 1
+                    except Exception as e:
+                        print(f"[SETUP WARNING] Failed to upload {file_path.name}: {str(e)}")
+                        continue
+
+            if file_count > 0:
+                print(f"[SETUP SUCCESS] Uploaded {file_count} task files to /home/ubuntu/task_files/")
+                self.task_files_exist = True
+            else:
+                print(f"[SETUP WARNING] No files were successfully uploaded")
+                self.task_files_exist = False
         else:
-            print(f"[SETUP WARNING] poppler-utils installation exited with code {exit_code}")
-            print(f"Output: {output}")
+            print(f"[SETUP] No task-specific files found for {self.validated.task_id}")
+            self.task_files_exist = False
 
-        output, exit_code = await self.sandbox.run("pip3 install -q openpyxl")
+    @tool
+    async def read(self, params: ReadParams) -> ToolOutput:
+        """
+        Read file contents. For binary files (Excel, Word, PDF, PowerPoint),
+        use the appropriate toolset tools instead.
+        """
+        file_path = params.file_path
 
-        if exit_code == 0:
-            print("[SETUP SUCCESS] openpyxl installed successfully")
-        else:
-            print(f"[SETUP WARNING] openpyxl installation exited with code {exit_code}")
-            print(f"Output: {output}")
+        # Check for binary file extensions
+        binary_extensions = {
+            '.xlsx': 'Excel files - use excel_read or excel_list_sheets',
+            '.xls': 'Excel files - use excel_read or excel_list_sheets',
+            '.docx': 'Word files - use word_read',
+            '.doc': 'Word files - use word_read',
+            '.pdf': 'PDF files - use pdf_read or pdf_get_page_count',
+            '.pptx': 'PowerPoint files - use powerpoint_read or powerpoint_list_slides',
+            '.ppt': 'PowerPoint files - use powerpoint_read or powerpoint_list_slides',
+        }
 
-        # Install PDF manipulation libraries
-        print("[SETUP] Installing PDF manipulation libraries...")
-        output, exit_code = await self.sandbox.run("pip3 install -q pdfplumber pypdf reportlab pdf2image pillow")
+        # Get file extension
+        ext = '.' + file_path.lower().rsplit('.', 1)[-1] if '.' in file_path else ''
 
-        if exit_code == 0:
-            print("[SETUP SUCCESS] PDF libraries installed successfully")
-        else:
-            print(f"[SETUP WARNING] PDF libraries installation exited with code {exit_code}")
-            print(f"Output: {output}")
+        if ext in binary_extensions:
+            suggestion = binary_extensions[ext]
+            return ToolOutput(
+                blocks=[TextBlock(text=f"Cannot read binary file with 'read' tool.\n\n{suggestion}\n\nAvailable toolset tools can properly parse this file format.")],
+                metadata={"error": "binary_file", "suggestion": suggestion},
+                reward=0.0,
+                finished=False,
+            )
+
+        # For text files, use parent class implementation
+        return await super().read(params)
 
     async def get_prompt(self) -> list[TextBlock]:
         """Return task prompt with sandbox context and submission instructions."""
@@ -137,9 +202,22 @@ class ApexAgents(CLIEnvironment):
 
 ENVIRONMENT INFORMATION:
 - You are working in a sandboxed Linux environment with CLI tools available
-- Task-specific files are mounted at: /orwd_data/
+- World files are mounted at: /orwd_data/ (read-only)
 - You can use the tools available to help solve the task
+
+IMPORTANT - File Type Tools:
+- For .xlsx/.xls files: use excel_read, excel_list_sheets (NOT read)
+- For .docx/.doc files: use word_read (NOT read)
+- For .pdf files: use pdf_read, pdf_get_page_count (NOT read)
+- For .pptx/.ppt files: use powerpoint_read, powerpoint_list_slides (NOT read)
+- For .txt/.csv/.md files: use read, grep, bash
 """
+
+        # Add task files information if they exist
+        if self.task_files_exist:
+            sandbox_info += """
+Additional task files are available at: /home/ubuntu/task_files/
+Use ls to explore the directory structure, then use the appropriate tool for each file type."""
 
         # Add submission instructions based on expected output
         if self.task_data["expected_output"] == "message_in_console":
