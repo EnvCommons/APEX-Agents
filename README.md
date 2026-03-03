@@ -35,7 +35,7 @@ This is a multi-turn environment with rubric-based evaluation. The agent uses CL
 
 ## Data
 
-Data consists of JSON metadata (`tasks_and_rubrics.json`) and task-specific filesystem snapshots (`task_files/`) sourced from [HuggingFace mercor/apex-agents](https://huggingface.co/datasets/mercor/apex-agents). Data is stored on the OpenReward platform.
+Data consists of JSON metadata (`tasks_and_rubrics.json`), world filesystems (`world_files/`) containing realistic workplace documents for each of the 33 scenarios, and task-specific files (`task_files/`) for individual tasks. Sourced from [HuggingFace mercor/apex-agents](https://huggingface.co/datasets/mercor/apex-agents). Data is stored on the OpenReward platform.
 
 ## Tools
 
