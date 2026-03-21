@@ -264,45 +264,38 @@ class CLIEnvironment(Environment):
             )
 
     @tool
-    def multi_edit(self, params: MultiEditParams) -> ToolOutput:
-        """Perform multiple edits on a single file."""
+    async def multi_edit(self, params: MultiEditParams) -> ToolOutput:
+        """Perform multiple edits on a single file via the sandbox."""
         try:
-            if not os.path.exists(params.file_path):
-                return ToolOutput(
-                    metadata={"error": "File does not exist"},
-                    blocks=[TextBlock(text="File does not exist")],
-                    finished=False
-                )
-            
-            with open(params.file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
+            # Read file from sandbox
+            content = await download_text(self.sandbox, params.file_path)
+
             total_replacements = 0
-            
+
             for edit in params.edits:
                 old_str = edit.get("old_string", "")
                 new_str = edit.get("new_string", "")
                 replace_all = edit.get("replace_all", False)
-                
+
                 if old_str not in content:
                     return ToolOutput(
                         metadata={"error": f"String '{old_str}' not found in file"},
                         blocks=[TextBlock(text=f"String '{old_str}' not found in file")],
                         finished=False
                     )
-                
+
                 if replace_all:
                     replacements = content.count(old_str)
                     content = content.replace(old_str, new_str)
                 else:
                     replacements = 1
                     content = content.replace(old_str, new_str, 1)
-                
+
                 total_replacements += replacements
-            
-            with open(params.file_path, 'w', encoding='utf-8') as f:
-                f.write(content)
-            
+
+            # Write file back to sandbox
+            await upload_text(self.sandbox, params.file_path, content, ensure_trailing_newline=True)
+
             return ToolOutput(
                 metadata={"total_replacements": total_replacements, "edits_applied": len(params.edits)},
                 blocks=[TextBlock(text=f"Successfully applied {len(params.edits)} edits with {total_replacements} total replacements")],
@@ -314,7 +307,6 @@ class CLIEnvironment(Environment):
                 blocks=[TextBlock(text=f"Error in multi-edit: {str(e)}")],
                 finished=False
             )
-
     @tool
     def todo_write(self, params: TodoWriteParams) -> ToolOutput:
         """
