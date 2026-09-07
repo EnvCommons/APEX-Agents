@@ -13,11 +13,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import apexagents  # noqa: E402
 from apexagents import (  # noqa: E402
-    DEFAULT_EXPECTED_OUTPUT,
     ApexAgents,
     SubmitFilesInput,
     TaskSpec,
-    expected_output_of,
+    resolve_expected_output,
 )
 
 # Task ids whose records carry no expected_output and are console-message tasks.
@@ -39,6 +38,7 @@ def _record(task_id: str, expected_output, prompt: str = "Do the thing.") -> dic
         "world_id": "world_test",
         "prompt": prompt,
         "expected_output": expected_output,
+        "gold_response_type": "text" if expected_output in (None, "message_in_console") else "file",
         "rubric": [{"verifier_id": "v1", "criteria": "It is done."}],
     }
 
@@ -135,7 +135,7 @@ def test_null_expected_output_normalises_to_console_message(task_dir, task_id):
             "expected_output": None,
         }
     )
-    assert spec.expected_output == "message_in_console"
+    assert spec.expected_output is None
 
     env = _build_env(task_id, None)
     assert env.task_data["expected_output"] == "message_in_console"
@@ -150,7 +150,13 @@ def test_missing_expected_output_key_normalises(task_dir):
             "prompt": "Do the thing.",
         }
     )
-    assert spec.expected_output == DEFAULT_EXPECTED_OUTPUT
+    assert spec.expected_output is None
+    assert (
+        resolve_expected_output(
+            {"expected_output": None, "gold_response_type": "text"}
+        )
+        == "message_in_console"
+    )
 
 
 def test_list_tasks_emits_no_null_expected_output(task_dir):
@@ -196,13 +202,12 @@ def test_every_deployed_task_record_validates():
                 "expected_output": record.get("expected_output"),
             }
         )
-        assert spec.expected_output
-        assert spec.expected_output == expected_output_of(record)
+        assert resolve_expected_output(record)
 
     assert normalised == len(NULL_EXPECTED_OUTPUT_TASK_IDS)
     by_id = {r["task_id"]: r for r in records}
     for task_id in NULL_EXPECTED_OUTPUT_TASK_IDS:
-        assert expected_output_of(by_id[task_id]) == "message_in_console"
+        assert resolve_expected_output(by_id[task_id]) == "message_in_console"
 
 
 # --- advertised tool names ---------------------------------------------------
