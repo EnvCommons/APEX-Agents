@@ -12,6 +12,7 @@ from openreward.toolsets import WordToolset, PDFToolset, ExcelToolset, PowerPoin
 from pydantic import BaseModel, Field
 
 from cli_environment import CLIEnvironment, ReadParams
+from judge import JudgeConfig, judge_criterion, prepare_submission
 
 # Data path in production (mounted via bucket config)
 import os
@@ -135,11 +136,9 @@ class ApexAgents(CLIEnvironment):
         # null rows keep routing to submit_files. See resolve_expected_output.
         self.task_data["expected_output"] = resolve_expected_output(self.task_data)
 
-        # Initialize OpenAI client for grading
-        api_key = secrets.get("openai_api_key")
-        if not api_key:
-            raise ValueError("OpenAI API key required in secrets")
-        self.grader_client = openai.AsyncClient(api_key=api_key)
+        # Judge client for rubric grading; provider comes from secrets/env
+        self.judge_config = JudgeConfig.from_secrets(secrets)
+        self.grader_client = self.judge_config.client()
 
         # Configure sandbox
         self.sandbox_settings = SandboxSettings(
@@ -403,46 +402,77 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
         """
         Grade submission against all rubric criteria.
         ALL criteria must pass for full reward.
+
+        A criterion the judge cannot grade is reported as a grader error
+        rather than as a failed criterion, and never aborts the episode.
         """
         rubric = self.task_data["rubric"]
+
+        prepared, truncated = prepare_submission(
+            submission, self.judge_config.max_submission_chars
+        )
 
         # Evaluate all criteria concurrently for performance
         evaluation_tasks = [
             self._evaluate_criterion(
-                submission=submission,
+                submission=prepared,
                 criterion=c["criteria"],
                 task_prompt=self.task_data["prompt"],
             )
             for c in rubric
         ]
-        evaluation_results = await asyncio.gather(*evaluation_tasks)
+        evaluation_results = await asyncio.gather(
+            *evaluation_tasks, return_exceptions=True
+        )
 
         # Build results with verifier IDs
         results = []
         for criterion, eval_result in zip(rubric, evaluation_results):
+            if isinstance(eval_result, BaseException):
+                eval_result = {
+                    "passed": False,
+                    "reasoning": f"Grader error: {eval_result}",
+                    "grader_error": str(eval_result),
+                }
             results.append(
                 {
                     "verifier_id": criterion["verifier_id"],
                     "criteria": criterion["criteria"],
                     "passed": eval_result["passed"],
                     "reasoning": eval_result["reasoning"],
+                    "grader_error": eval_result.get("grader_error"),
                 }
             )
 
-        # All criteria must pass
-        all_passed = all(r["passed"] for r in results)
+        grader_errors = [r for r in results if r["grader_error"]]
+        grading_complete = not grader_errors
+
+        # All criteria must pass, and all criteria must have been graded
         passed_count = sum(r["passed"] for r in results)
+        all_passed = grading_complete and all(r["passed"] for r in results)
 
         # Display text
         display_lines = [
             f"Rubric Evaluation ({passed_count}/{len(results)} criteria passed):"
         ]
         for i, r in enumerate(results, 1):
-            status = "✓" if r["passed"] else "✗"
+            status = "!" if r["grader_error"] else ("✓" if r["passed"] else "✗")
             display_lines.append(f"\n{status} Criterion {i}: {r['criteria']}")
             display_lines.append(f"   Reasoning: {r['reasoning']}")
 
-        if all_passed:
+        if truncated:
+            display_lines.append(
+                "\n\nNote: the submission was truncated to fit the grading "
+                "context limit; grading used the visible content."
+            )
+
+        if not grading_complete:
+            display_lines.append(
+                f"\n\n⚠️ {len(grader_errors)} criteria could not be graded "
+                "(grader error). This submission was not fully evaluated and "
+                "scores 0.0."
+            )
+        elif all_passed:
             display_lines.append("\n\n✅ All criteria passed!")
         else:
             display_lines.append(
@@ -457,6 +487,17 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
                 "criteria_results": results,
                 "passed_count": passed_count,
                 "total_count": len(results),
+                # Grading is incomplete when the judge could not return a
+                # verdict for some criterion. The reward is 0.0 either way,
+                # so these flags distinguish it from a graded failure.
+                "grading_complete": grading_complete,
+                "grader_error_count": len(grader_errors),
+                "grader_errors": [
+                    {"verifier_id": r["verifier_id"], "error": r["grader_error"]}
+                    for r in grader_errors
+                ],
+                "submission_truncated": truncated,
+                "judge_model": self.judge_config.model,
             },
             "reward": 1.0 if all_passed else 0.0,
         }
@@ -465,33 +506,24 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
         self, submission: str, criterion: str, task_prompt: str
     ) -> dict[str, Any]:
         """
-        Use gpt-5-mini to evaluate a single criterion.
+        Ask the judge whether a single criterion is met.
+
+        The verdict comes from the structured `is_criteria_true` field, so
+        wording in the rationale cannot change the outcome. Raises
+        `GraderError` when no verdict can be obtained.
         """
-        grader_prompt = f"""You are evaluating whether a submission meets a specific criterion.
-
-Task Prompt:
-{task_prompt}
-
-Submission:
-{submission}
-
-Criterion to evaluate:
-{criterion}
-
-Does the submission meet this criterion? Provide brief reasoning (1-2 sentences), then answer either "PASS" or "FAIL"."""
-
-        response = await self.grader_client.chat.completions.create(
-            model="gpt-5-mini",
-            messages=[{"role": "user", "content": grader_prompt}],
+        verdict = await judge_criterion(
+            self.grader_client,
+            self.judge_config,
+            task_prompt=task_prompt,
+            submission=submission,
+            criterion=criterion,
         )
-
-        grading_text = response.choices[0].message.content or ""
-
-        # Parse result
-        upper_text = grading_text.upper()
-        passed = "PASS" in upper_text and "FAIL" not in upper_text
-
-        return {"passed": passed, "reasoning": grading_text}
+        return {
+            "passed": verdict.is_criteria_true,
+            "reasoning": verdict.rationale,
+            "grader_error": None,
+        }
 
     def _extract_text_from_files(self, file_contents: dict[str, bytes]) -> str:
         """

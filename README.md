@@ -31,7 +31,11 @@ Tasks include task-specific filesystems based on 33 realistic workplace scenario
 
 ## Reward Structure
 
-This is a multi-turn environment with rubric-based evaluation. The agent uses CLI tools to explore files and complete tasks, then submits via `submit_answer` (for console message tasks) or `submit_files` (for file-based outputs). An LLM grader (gpt-5-mini) evaluates against 1-10 binary rubric criteria. ALL criteria must pass for reward=1.0, otherwise reward=0.0.
+This is a multi-turn environment with rubric-based evaluation. The agent uses CLI tools to explore files and complete tasks, then submits via `submit_answer` (for console message tasks) or `submit_files` (for file-based outputs). An LLM judge evaluates the submission against 1-10 binary rubric criteria, one call per criterion. ALL criteria must pass for reward=1.0, otherwise reward=0.0.
+
+Each judge call returns a structured verdict — a rationale plus an `is_criteria_true` boolean — so the outcome is carried by that field alone and wording in the rationale never changes it. The rubric criteria and grading instructions are sent as a system message and the submission is fenced off as untrusted data. Judge calls have a per-criterion timeout and are retried; a criterion that still yields no verdict is reported as a grader error rather than as a failed criterion, and does not abort the episode. A submission that could not be fully graded scores 0.0 and is marked with `grading_complete: false` and `grader_error_count` in the metadata, distinguishing it from a submission that was graded and failed. Submission text is capped before grading, with an explicit marker where it was truncated.
+
+Grading metadata reports `passed_count`, `total_count`, per-criterion results, `grading_complete`, `grader_error_count`, `grader_errors`, `submission_truncated` and `judge_model`.
 
 ## Data
 
@@ -84,7 +88,19 @@ Tasks are complex multi-step professional workflows that experienced professiona
 
 ## Other Environment Requirements
 
-OpenAI API key required for LLM-based grading. Pass via `secrets={"openai_api_key": "..."}`.
+An API key for the rubric judge is required. The judge runs against any OpenAI-compatible endpoint and is selected through `secrets` (or the equivalent upper-case environment variable):
+
+| Secret | Purpose |
+| --- | --- |
+| `openai_api_key` | OpenAI API key; judge defaults to `gpt-5-mini` |
+| `openrouter_api_key` | OpenRouter API key; judge defaults to `openai/gpt-5.6-luna` and base URL `https://openrouter.ai/api/v1` |
+| `judge_model` | Overrides the judge model for either provider |
+| `judge_base_url` | Overrides the judge endpoint |
+| `judge_timeout` | Per-criterion call timeout in seconds (default 180) |
+| `judge_max_attempts` | Attempts per criterion before a grader error (default 4) |
+| `judge_max_submission_chars` | Submission cap handed to the judge (default 120000) |
+
+An OpenRouter key takes precedence when both are present.
 
 ## Safety
 

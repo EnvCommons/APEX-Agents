@@ -1,0 +1,110 @@
+[
+  {
+    "task_id": "task_55a201bd877a42eeb0e1868fb6a84230",
+    "domain": "Management Consulting",
+    "verifier_id": "ver_e3a87667e3ff4aa0be08cbd9b03208cc",
+    "criteria": "States that the asset type with the highest average of adjusted failure probability is not responsible for the highest average financial impact"
+  },
+  {
+    "task_id": "task_55a201bd877a42eeb0e1868fb6a84230",
+    "domain": "Management Consulting",
+    "verifier_id": "ver_f229646c31f54e5d91f543011c70c8d0",
+    "criteria": "States that the average adjusted failure probability per outage for the Transmission Line asset type is 51.59%"
+  },
+  {
+    "task_id": "task_8705d28530a94c2880fbfd7190e257d4",
+    "domain": "Law",
+    "verifier_id": "ver_a62e43018d664eaca41a46c83d2ff246",
+    "criteria": "States that Sellers shall be responsible for full payment of any liabilities pertaining to the Seller’s failure to retain a valid S Corporation status"
+  },
+  {
+    "task_id": "task_8705d28530a94c2880fbfd7190e257d4",
+    "domain": "Law",
+    "verifier_id": "ver_6fb8ef69724d45e3976af6987d0fba26",
+    "criteria": "States at least one of the following post-closing obligations: (1) that Sellers shall cooperate with Buyer in matters pertaining to Summit’s failure to retain valid S Corporation status; and (2) that Sellers shall cooperate with Buyer in matters pertaining to Summit’s failure to satisfy pre-closing tax obligations"
+  },
+  {
+    "task_id": "task_8705d28530a94c2880fbfd7190e257d4",
+    "domain": "Law",
+    "verifier_id": "ver_a69399f9e4fb490e9d290b0942d7a43e",
+    "criteria": "States that Sellers indemnify the Buyer from any liability that the Buyer suffers arising from Summit’s failure to retain a valid S Corporation status"
+  },
+  {
+    "task_id": "task_8a22b80c7b2b49c59d6deed5b94d6857",
+    "domain": "Law",
+    "verifier_id": "ver_d54d9c67bc1e4543aed74b883c1188e1",
+    "criteria": "States that the most effective argument for arguing a rule 12 motion includes any of the following basis: (1) that there is a failure to state a claim in the plaintiff’s complaint and (2) is made pursuant to rule 12(b)(6) of the Federal Rules of Civil Procedure"
+  },
+  {
+    "task_id": "task_fe573b8ce38d4a9f9642fbe7b8f11358",
+    "domain": "Law",
+    "verifier_id": "ver_d990bf3dd87a4a93ac7514dd91bdca09",
+    "criteria": "States at least one of the following risks regarding SLL’s new customer marketing initiative: (1) that the initiative does not mandate obtaining any form of consent from customers prior to marketing contact; (2) that the initiative does not mandate documenting a customer’s consent prior to marketing contact; (3) that the initiative fails to check if the customer’s number is listed on the National Do-Not-Call Registry; and (4) that future changes to the initiative may require prior express written consent from customers prior to marketing contact"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_1598ab14b3f943848da60e2a470d58db",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to sufficiently maintain compliance policies for employee reference"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_a60cf7a152a5429d9785899a70bf4555",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to establish the existence of a board-approved compliance policy document"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_11123d001df0471b852584cbe9e7eb44",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to effectively manage compliance risk in all of the following: (1) products of Senior Living Lending, Inc. and (2) services of Senior Living Lending, Inc"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_8c9d61914bd64328909fa9e694164286",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to identify all of the following: (1) the products offered by Senior Living Lending, Inc. and (2) the services offered by Senior Living Lending, Inc"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_353aaa5713944c6e9d3b3d6445ce389a",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to cover the full life-cycle of all of the following: (1) products offered by Senior Living Lending, Inc. and (2) services offered by by Senior Living Lending, Inc"
+  },
+  {
+    "task_id": "task_b3b22cc6374e42f39cb07b5aa0a6d0f3",
+    "domain": "Law",
+    "verifier_id": "ver_e400ae83ab88432ea6aaf8bce2d396cc",
+    "criteria": "States that the Complaint Response and Regulatory Investigation Protocols fail to address all of the following purposes: (1) minimizing violations of applicable federal consumer financial laws, (2) detecting harm to consumers due to violations of applicable federal consumer financial laws, and (3) minimizing risks of consumer harm due to violations of applicable federal consumer financial laws"
+  },
+  {
+    "task_id": "task_0ae01f72a4e34633855686b7b0e8d455",
+    "domain": "Law",
+    "verifier_id": "ver_0a8c824045cc44f4a49b4fb30a9feeac",
+    "criteria": "States that SLL failed to obtain express written consent before sending the text promoting the reverse mortgage product"
+  },
+  {
+    "task_id": "task_6790bd5747ca479b810c4e33bf423c02",
+    "domain": "Law",
+    "verifier_id": "ver_b73dd611d9284b788f035f6f37523c79",
+    "criteria": "States that the penalty for failing to comply with a fire safety direction is a fine at Level 6"
+  },
+  {
+    "task_id": "task_6790bd5747ca479b810c4e33bf423c02",
+    "domain": "Law",
+    "verifier_id": "ver_67d07f5e54ce4063a4d099fcb552d6e5",
+    "criteria": "States that a fine of HK$10,000 applies for each day or part of a day during which the failure continues after the expiry of the period specified in the direction"
+  },
+  {
+    "task_id": "task_8b6eb8654c134d039f9b9856fb4bd8ad",
+    "domain": "Law",
+    "verifier_id": "ver_7ecdb36af19f42be9f964bcfe28033a4",
+    "criteria": "States that the failure to establish a prima facie showing of discrimination under Title VII of the Americans with Disabilities Act is fatal to Smith's claim of racial discrimination"
+  },
+  {
+    "task_id": "task_3e4eba49c9cd4d3fa0de912ab1b1501e",
+    "domain": "Law",
+    "verifier_id": "ver_c6c3d43ff00c4777b43725284f5533f1",
+    "criteria": "States that Northstar's security measures failed to adequately safeguard the data that Northstar collected"
+  }
+]
