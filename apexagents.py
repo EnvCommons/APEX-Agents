@@ -158,7 +158,7 @@ class ApexAgents(CLIEnvironment):
         # Configure sandbox
         self.sandbox_settings = SandboxSettings(
             environment="GeneralReasoning/APEX-Agents",
-            image="generalreasoning/knowledge-worker",
+            image="generalreasoning/knowledge-worker:1.1",
             machine_size="2:2",
             block_network=False,
             bucket_config=SandboxBucketConfig(
