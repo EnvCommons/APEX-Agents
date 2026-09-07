@@ -18,6 +18,8 @@ import os
 import re
 from typing import Any
 
+from urllib.parse import urlparse
+
 import openai
 from pydantic import BaseModel, Field
 
@@ -25,6 +27,22 @@ from pydantic import BaseModel, Field
 DEFAULT_OPENAI_JUDGE_MODEL = "gpt-5-mini"
 DEFAULT_OPENROUTER_JUDGE_MODEL = "openai/gpt-5.6-luna"
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
+# Hosts that serve OpenAI's own model names; anything else needs its own default.
+OPENAI_API_HOSTS = ("api.openai.com",)
+
+
+def _default_model_for(base_url: str | None) -> str:
+    """Judge model to use for an OpenAI-compatible endpoint."""
+    if not base_url:
+        return DEFAULT_OPENAI_JUDGE_MODEL
+    host = urlparse(base_url).hostname or ""
+    if host in OPENAI_API_HOSTS:
+        return DEFAULT_OPENAI_JUDGE_MODEL
+    if "openrouter" in host:
+        return DEFAULT_OPENROUTER_JUDGE_MODEL
+    return DEFAULT_OPENAI_JUDGE_MODEL
+
 
 # Per-criterion call budget.
 DEFAULT_JUDGE_TIMEOUT = 180.0
@@ -90,7 +108,12 @@ class JudgeConfig(BaseModel):
             model = model or DEFAULT_OPENROUTER_JUDGE_MODEL
         elif openai_key:
             api_key = openai_key
-            model = model or DEFAULT_OPENAI_JUDGE_MODEL
+            # The endpoint decides which model namespace applies. A caller that
+            # routes an OpenAI-compatible key through another gateway sets
+            # OPENAI_BASE_URL, and that gateway does not serve OpenAI's own
+            # model names, so pick the default that endpoint can actually serve.
+            endpoint = base_url or os.environ.get("OPENAI_BASE_URL")
+            model = model or _default_model_for(endpoint)
         else:
             raise ValueError(
                 "A judge API key is required in secrets: provide "

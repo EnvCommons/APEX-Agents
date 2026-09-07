@@ -13,6 +13,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from judge import (  # noqa: E402
+    DEFAULT_OPENAI_JUDGE_MODEL,
+    DEFAULT_OPENROUTER_JUDGE_MODEL,
     GraderError,
     JudgeConfig,
     build_judge_messages,
@@ -381,3 +383,34 @@ def test_missing_key_is_an_explicit_error(monkeypatch):
         monkeypatch.delenv(name, raising=False)
     with pytest.raises(ValueError, match="judge API key"):
         JudgeConfig.from_secrets({})
+
+
+# --- judge model follows the endpoint ----------------------------------------
+
+def test_openai_key_through_openrouter_defaults_to_openrouter_model(monkeypatch):
+    """A gateway that does not serve OpenAI model names gets its own default."""
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
+    monkeypatch.delenv("JUDGE_MODEL", raising=False)
+    cfg = JudgeConfig.from_secrets({"openai_api_key": "sk-test"})
+    assert cfg.model == DEFAULT_OPENROUTER_JUDGE_MODEL
+
+
+def test_openai_key_without_base_url_keeps_openai_model(monkeypatch):
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("JUDGE_MODEL", raising=False)
+    cfg = JudgeConfig.from_secrets({"openai_api_key": "sk-test"})
+    assert cfg.model == DEFAULT_OPENAI_JUDGE_MODEL
+
+
+def test_openai_key_against_openai_host_keeps_openai_model(monkeypatch):
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+    monkeypatch.delenv("JUDGE_MODEL", raising=False)
+    cfg = JudgeConfig.from_secrets({"openai_api_key": "sk-test"})
+    assert cfg.model == DEFAULT_OPENAI_JUDGE_MODEL
+
+
+def test_explicit_judge_model_wins_over_endpoint_default(monkeypatch):
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
+    monkeypatch.setenv("JUDGE_MODEL", "anthropic/claude-sonnet-4.5")
+    cfg = JudgeConfig.from_secrets({"openai_api_key": "sk-test"})
+    assert cfg.model == "anthropic/claude-sonnet-4.5"
