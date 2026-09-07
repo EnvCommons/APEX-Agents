@@ -24,6 +24,7 @@ from pydantic import BaseModel, Field
 
 from cli_environment import CLIEnvironment, ReadParams
 from judge import JudgeConfig, judge_criterion, prepare_submission
+from market_data import MarketDataToolset
 
 # Data path in production (mounted via bucket config)
 import os
@@ -130,7 +131,7 @@ class ApexAgents(CLIEnvironment):
     Tasks require multi-turn interaction with file exploration and creation.
     Evaluation uses LLM-based rubric grading with binary criteria.
     """
-    toolsets = [WordToolset, PDFToolset, ExcelToolset, PowerPointToolset]
+    toolsets = [WordToolset, PDFToolset, ExcelToolset, PowerPointToolset, MarketDataToolset]
 
     def __init__(self, task_spec: JSONObject, secrets: dict[str, str] = {}) -> None:
         super().__init__(task_spec, secrets=secrets)
