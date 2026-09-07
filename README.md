@@ -35,7 +35,7 @@ This is a multi-turn environment with rubric-based evaluation. The agent uses CL
 
 ## Data
 
-Data consists of JSON metadata (`tasks_and_rubrics.json`), world filesystems (`world_files/`) containing realistic workplace documents for each of the 33 scenarios, and task-specific files (`task_files/`) for individual tasks. Sourced from [HuggingFace mercor/apex-agents](https://huggingface.co/datasets/mercor/apex-agents). Data is stored on the OpenReward platform.
+Data consists of JSON metadata (`tasks_and_rubrics.json`), world filesystems (`world_files/`) containing realistic workplace documents (`filesystem/`) and a mail, chat and calendar corpus (`.apps_data/`) for each of the 33 scenarios, and task-specific files (`task_files/`) for individual tasks. Sourced from [HuggingFace mercor/apex-agents](https://huggingface.co/datasets/mercor/apex-agents). Data is stored on the OpenReward platform.
 
 ## Tools
 
@@ -50,12 +50,14 @@ Data consists of JSON metadata (`tasks_and_rubrics.json`), world filesystems (`w
 | `grep` | Search file contents. |
 | `glob` | Find files by pattern. |
 | `ls` | List directory contents. |
-| `excel_read` | Read Excel file contents. |
-| `excel_list_sheets` | List sheets in an Excel file. |
-| `word_read` | Read Word document contents. |
-| `pdf_read` | Read PDF file contents. |
-| `powerpoint_read` | Read PowerPoint file contents. |
-| `powerpoint_list_slides` | List slides in a PowerPoint file. |
+| `excel_read_tab` | Read a worksheet from an Excel file. |
+| `excel_list_tabs_in_spreadsheet` | List the worksheets in an Excel file. |
+| `word_read_document_content` | Read Word document contents. |
+| `word_get_document_overview` | Summarise the structure of a Word document. |
+| `pdfs_read_pdf_pages` | Read pages of a PDF file. |
+| `pdfs_get_document_overview` | Summarise a PDF, including its page count. |
+| `powerpoint_read_all` | Read a whole PowerPoint deck. |
+| `powerpoint_read_slides` | Read selected slides of a PowerPoint deck. |
 
 ## Time Horizon
 

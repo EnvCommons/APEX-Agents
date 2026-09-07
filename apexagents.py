@@ -80,6 +80,33 @@ class SubmitFilesInput(BaseModel):
     )
 
 
+# Reader tools advertised for each binary document type, in the order the agent
+# should reach for them. The names are filtered against the environment's
+# registered tools before they reach the model, so only real tools are named.
+BINARY_FILE_READERS: tuple[tuple[str, tuple[str, ...], tuple[str, ...]], ...] = (
+    (
+        "Excel",
+        (".xlsx", ".xls"),
+        ("excel_read_tab", "excel_list_tabs_in_spreadsheet"),
+    ),
+    (
+        "Word",
+        (".docx", ".doc"),
+        ("word_read_document_content", "word_get_document_overview"),
+    ),
+    (
+        "PDF",
+        (".pdf",),
+        ("pdfs_read_pdf_pages", "pdfs_get_document_overview"),
+    ),
+    (
+        "PowerPoint",
+        (".pptx", ".ppt"),
+        ("powerpoint_read_all", "powerpoint_read_slides"),
+    ),
+)
+
+
 class ApexAgents(CLIEnvironment):
     """
     APEX-AGENTS Environment: Professional services benchmark with 480 tasks
@@ -198,6 +225,15 @@ class ApexAgents(CLIEnvironment):
             print(f"[SETUP] No task-specific files found for {self.validated.task_id}")
             self.task_files_exist = False
 
+    @classmethod
+    def _reader_tools(cls) -> list[tuple[str, tuple[str, ...], list[str]]]:
+        """Binary document types paired with the reader tools this env registers."""
+        registered = {spec.name for spec in cls.list_tools().tools}
+        return [
+            (label, extensions, [name for name in candidates if name in registered])
+            for label, extensions, candidates in BINARY_FILE_READERS
+        ]
+
     @tool
     async def read(self, params: ReadParams) -> ToolOutput:
         """
@@ -207,15 +243,13 @@ class ApexAgents(CLIEnvironment):
         file_path = params.file_path
 
         # Check for binary file extensions
-        binary_extensions = {
-            '.xlsx': 'Excel files - use excel_read or excel_list_sheets',
-            '.xls': 'Excel files - use excel_read or excel_list_sheets',
-            '.docx': 'Word files - use word_read',
-            '.doc': 'Word files - use word_read',
-            '.pdf': 'PDF files - use pdf_read or pdf_get_page_count',
-            '.pptx': 'PowerPoint files - use powerpoint_read or powerpoint_list_slides',
-            '.ppt': 'PowerPoint files - use powerpoint_read or powerpoint_list_slides',
-        }
+        binary_extensions: dict[str, str] = {}
+        for label, extensions, reader_tools in self._reader_tools():
+            if not reader_tools:
+                continue
+            suggestion = f"{label} files - use {' or '.join(reader_tools)}"
+            for extension in extensions:
+                binary_extensions[extension] = suggestion
 
         # Get file extension
         ext = '.' + file_path.lower().rsplit('.', 1)[-1] if '.' in file_path else ''
@@ -236,19 +270,28 @@ class ApexAgents(CLIEnvironment):
         """Return task prompt with sandbox context and submission instructions."""
         base_prompt = self.task_data["prompt"]
 
+        # Advertise only the reader tools this environment actually registers
+        tool_lines = "\n".join(
+            f"- For {'/'.join(extensions)} files: use {', '.join(reader_tools)} (NOT read)"
+            for _label, extensions, reader_tools in self._reader_tools()
+            if reader_tools
+        )
+
         # Add context about sandbox environment
         sandbox_info = f"""
 
 ENVIRONMENT INFORMATION:
 - You are working in a sandboxed Linux environment with CLI tools available
-- World files are mounted at: /orwd_data/ (read-only)
+- World files are mounted read-only at /orwd_data/, in two subtrees:
+  - /orwd_data/filesystem/ - the documents for this world (Excel, Word, PDF,
+    PowerPoint, text)
+  - /orwd_data/.apps_data/ - the mail, chat and calendar corpus for this world.
+    It is a dot-directory, so a plain `ls /orwd_data/` will not list it; use
+    `ls -a /orwd_data/` or address it by path.
 - You can use the tools available to help solve the task
 
 IMPORTANT - File Type Tools:
-- For .xlsx/.xls files: use excel_read, excel_list_sheets (NOT read)
-- For .docx/.doc files: use word_read (NOT read)
-- For .pdf files: use pdf_read, pdf_get_page_count (NOT read)
-- For .pptx/.ppt files: use powerpoint_read, powerpoint_list_slides (NOT read)
+{tool_lines}
 - For .txt/.csv/.md files: use read, grep, bash
 """
 
@@ -423,7 +466,6 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
     ) -> dict[str, Any]:
         """
         Use gpt-5-mini to evaluate a single criterion.
-        CRITICAL: No temperature parameter (per CLAUDE.md grader rules).
         """
         grader_prompt = f"""You are evaluating whether a submission meets a specific criterion.
 
@@ -439,9 +481,8 @@ Criterion to evaluate:
 Does the submission meet this criterion? Provide brief reasoning (1-2 sentences), then answer either "PASS" or "FAIL"."""
 
         response = await self.grader_client.chat.completions.create(
-            model="gpt-5-mini",  # MUST use gpt-5-mini for graders
+            model="gpt-5-mini",
             messages=[{"role": "user", "content": grader_prompt}],
-            # NO temperature parameter (per CLAUDE.md)
         )
 
         grading_text = response.choices[0].message.content or ""
