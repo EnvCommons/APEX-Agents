@@ -62,6 +62,7 @@ Data consists of JSON metadata (`tasks_and_rubrics.json`), world filesystems (`w
 | `pdfs_get_document_overview` | Summarise a PDF, including its page count. |
 | `powerpoint_read_all` | Read a whole PowerPoint deck. |
 | `powerpoint_read_slides` | Read selected slides of a PowerPoint deck. |
+| `fmp_market` | Published market and macroeconomic reference data — US Treasury par yield curve rates and CPI. Investment Banking worlds only; coverage boundary in [`market_data_fixtures/COVERAGE.md`](market_data_fixtures/COVERAGE.md). |
 
 ## Time Horizon
 
