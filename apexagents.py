@@ -158,7 +158,7 @@ class ApexAgents(CLIEnvironment):
         # Configure sandbox
         self.sandbox_settings = SandboxSettings(
             environment="GeneralReasoning/APEX-Agents",
-            image="generalreasoning/knowledge-worker",
+            image="generalreasoning/knowledge-worker:1.1",
             machine_size="2:2",
             block_network=False,
             bucket_config=SandboxBucketConfig(
@@ -178,7 +178,7 @@ class ApexAgents(CLIEnvironment):
         self.task_files_exist = False
 
     async def setup(self) -> None:
-        """Start sandbox and install python-pptx, python-docx, openpyxl, and PDF libraries for PowerPoint, Word, Excel, and PDF tools"""
+        """Start the sandbox and upload the task's files into /home/ubuntu/task_files"""
         await self.sandbox.start()
       
         # Upload task-specific files if they exist
