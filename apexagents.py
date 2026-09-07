@@ -3,9 +3,20 @@ from __future__ import annotations
 import asyncio
 import io
 import json
+import shutil
+import subprocess
+import tempfile
+import xml.etree.ElementTree as ET
+import zipfile
 from typing import Any, Optional
 
 import openai
+import openpyxl
+from docx import Document
+from docx.oxml.ns import qn
+from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pypdf import PdfReader
 from openreward.environments import JSONObject, TextBlock, ToolOutput, tool
 from openreward import AsyncOpenReward, SandboxBucketConfig, SandboxSettings
 from openreward.toolsets import WordToolset, PDFToolset, ExcelToolset, PowerPointToolset
@@ -51,6 +62,9 @@ def resolve_expected_output(task: dict[str, Any]) -> Optional[str]:
         return "message_in_console"
     return expected
 
+# Ceiling on a single headless LibreOffice recalculation of a submitted
+# workbook, so a pathological file cannot hold a submission open.
+_RECALC_TIMEOUT_SECONDS = 120
 
 class TaskSpec(BaseModel):
     """Task specification for apex-agents tasks."""
@@ -528,61 +542,85 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
     def _extract_text_from_files(self, file_contents: dict[str, bytes]) -> str:
         """
         Extract text from submitted files for grading.
-        Handles .docx, .xlsx, .pptx, .txt, .md, .csv
+
+        Handles .docx, .xlsx/.xlsm, .pptx, .pdf and plain-text formats. Every
+        file yields a block, including one that cannot be parsed: an
+        unsupported or broken file emits a visible marker so an empty
+        extraction is never graded as an empty submission. Per-file outcomes
+        are also recorded on ``extraction_diagnostics``.
+
+        Pure with respect to the arguments apart from that one attribute, so it
+        is safe to run off the event loop in a worker thread.
         """
-        try:
-            from docx import Document
-        except ImportError:
-            from python_docx import Document
-
-        try:
-            import openpyxl
-        except ImportError:
-            pass
-
-        try:
-            from pptx import Presentation
-        except ImportError:
-            pass
-
-        extracted = []
+        extracted: list[str] = []
+        diagnostics: list[dict[str, Any]] = []
 
         for fpath, content in file_contents.items():
+            # The submitted path decides the parser, matched case-insensitively
+            # so an upper-case extension is not treated as unknown.
+            ext = os.path.splitext(fpath)[1].lower()
             try:
-                if fpath.endswith(".docx"):
-                    doc = Document(io.BytesIO(content))
-                    text = "\n".join([p.text for p in doc.paragraphs])
+                if ext == ".docx":
+                    text = _docx_to_text(content)
                     extracted.append(f"=== {fpath} ===\n{text}")
+                    diagnostics.append({"file": fpath, "status": "ok", "format": ext})
 
-                elif fpath.endswith(".xlsx"):
-                    wb = openpyxl.load_workbook(io.BytesIO(content))
-                    for sheet in wb.worksheets:
-                        rows = [
-                            " | ".join([str(cell.value or "") for cell in row])
-                            for row in sheet.iter_rows()
-                        ]
-                        extracted.append(
-                            f"=== {fpath} - {sheet.title} ===\n" + "\n".join(rows)
-                        )
-
-                elif fpath.endswith(".pptx"):
-                    prs = Presentation(io.BytesIO(content))
-                    for i, slide in enumerate(prs.slides):
-                        slide_text = []
-                        for shape in slide.shapes:
-                            if hasattr(shape, "text"):
-                                slide_text.append(shape.text)
-                        extracted.append(
-                            f"=== {fpath} - Slide {i+1} ===\n" + "\n".join(slide_text)
-                        )
-
-                elif fpath.endswith((".txt", ".md", ".csv")):
-                    text = content.decode("utf-8", errors="ignore")
+                elif ext in (".xlsx", ".xlsm"):
+                    text, recalc = _xlsx_to_text(content, ext)
                     extracted.append(f"=== {fpath} ===\n{text}")
+                    diagnostics.append(
+                        {
+                            "file": fpath,
+                            "status": "ok",
+                            "format": ext,
+                            "formula_recalc": recalc,
+                        }
+                    )
+
+                elif ext == ".pptx":
+                    text = _pptx_to_text(content)
+                    extracted.append(f"=== {fpath} ===\n{text}")
+                    diagnostics.append({"file": fpath, "status": "ok", "format": ext})
+
+                elif ext == ".pdf":
+                    text = _pdf_to_text(content)
+                    extracted.append(f"=== {fpath} ===\n{text}")
+                    diagnostics.append({"file": fpath, "status": "ok", "format": ext})
+
+                elif ext in (".txt", ".md", ".csv", ".json", ".tsv", ".xml", ".html"):
+                    text = content.decode("utf-8", errors="replace")
+                    extracted.append(f"=== {fpath} ===\n{text}")
+                    diagnostics.append({"file": fpath, "status": "ok", "format": ext})
+
+                else:
+                    label = ext or "(no extension)"
+                    extracted.append(
+                        f"=== {fpath} ===\n"
+                        f"[EXTRACTION FAILED: unsupported file type {label}. "
+                        f"No text could be read from this file, so none of its "
+                        f"contents are part of the graded submission.]"
+                    )
+                    diagnostics.append(
+                        {"file": fpath, "status": "unsupported", "format": label}
+                    )
 
             except Exception as e:
-                extracted.append(f"=== {fpath} ===\nError extracting text: {str(e)}")
+                extracted.append(
+                    f"=== {fpath} ===\n"
+                    f"[EXTRACTION FAILED: {type(e).__name__}: {e}. "
+                    f"No text could be read from this file, so none of its "
+                    f"contents are part of the graded submission.]"
+                )
+                diagnostics.append(
+                    {
+                        "file": fpath,
+                        "status": "error",
+                        "format": ext,
+                        "error": f"{type(e).__name__}: {e}",
+                    }
+                )
 
+        self.extraction_diagnostics = diagnostics
         return "\n\n".join(extracted)
 
     @classmethod
@@ -612,3 +650,365 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
     @classmethod
     def list_splits(cls) -> list[str]:
         return ["test"]
+
+
+# --- File extraction helpers -------------------------------------------------
+#
+# These render a submitted binary document into the plain text a rubric judge
+# reads. They are module-level and stateless so they can run in a worker
+# thread. Fidelity matters more than brevity here: a number that does not
+# survive extraction cannot be credited.
+
+
+def _docx_to_text(content: bytes) -> str:
+    """Render a .docx as text, including everything outside the body flow.
+
+    ``Document.paragraphs`` covers only top-level body paragraphs, so tables,
+    headers, footers, text boxes and footnotes are collected separately.
+    """
+    doc = Document(io.BytesIO(content))
+    parts: list[str] = []
+
+    for para in doc.paragraphs:
+        text = para.text.strip()
+        if text:
+            parts.append(text)
+
+    for table in doc.tables:
+        parts.extend(_docx_table_lines(table))
+
+    # Text boxes live in a drawing canvas rather than the body flow, so their
+    # runs are read straight off the XML.
+    textbox_lines = _docx_textbox_lines(doc)
+    if textbox_lines:
+        parts.append("=== Text Boxes ===")
+        parts.extend(textbox_lines)
+
+    for idx, section in enumerate(doc.sections, start=1):
+        for label, container in (
+            ("Header", section.header),
+            ("First Page Header", section.first_page_header),
+            ("Even Page Header", section.even_page_header),
+            ("Footer", section.footer),
+            ("First Page Footer", section.first_page_footer),
+            ("Even Page Footer", section.even_page_footer),
+        ):
+            lines = _docx_container_lines(container)
+            if lines:
+                parts.append(f"=== Section {idx} {label} ===")
+                parts.extend(lines)
+
+    for label, part_name in (
+        ("Footnotes", "word/footnotes.xml"),
+        ("Endnotes", "word/endnotes.xml"),
+    ):
+        lines = _docx_note_lines(content, part_name)
+        if lines:
+            parts.append(f"=== {label} ===")
+            parts.extend(lines)
+
+    return "\n".join(parts)
+
+
+def _docx_table_lines(table: Any) -> list[str]:
+    """Rows of a table as tab-separated lines, following nested tables."""
+    lines: list[str] = []
+    for row in table.rows:
+        cells: list[str] = []
+        for cell in row.cells:
+            cell_text = cell.text.strip()
+            cells.append(cell_text)
+            for nested in cell.tables:
+                lines.extend(_docx_table_lines(nested))
+        if any(cells):
+            lines.append("\t".join(cells))
+    return lines
+
+
+def _docx_container_lines(container: Any) -> list[str]:
+    """Paragraph and table text of a header or footer."""
+    lines: list[str] = []
+    try:
+        if container.is_linked_to_previous:
+            return lines
+        for para in container.paragraphs:
+            text = para.text.strip()
+            if text:
+                lines.append(text)
+        for table in container.tables:
+            lines.extend(_docx_table_lines(table))
+    except (AttributeError, ValueError):
+        return lines
+    return lines
+
+
+def _docx_textbox_lines(doc: Any) -> list[str]:
+    """Text of every text box anchored in the document body."""
+    lines: list[str] = []
+    for txbx in doc.element.body.iter(qn("w:txbxContent")):
+        for para in txbx.iter(qn("w:p")):
+            text = "".join(node.text or "" for node in para.iter(qn("w:t"))).strip()
+            if text:
+                lines.append(text)
+    return lines
+
+
+def _docx_note_lines(content: bytes, part_name: str) -> list[str]:
+    """Footnote or endnote text, read from the package part directly.
+
+    python-docx exposes no API for these parts, and the separator notes Word
+    always writes are skipped so only authored notes appear.
+    """
+    lines: list[str] = []
+    try:
+        with zipfile.ZipFile(io.BytesIO(content)) as zf:
+            if part_name not in zf.namelist():
+                return lines
+            root = ET.fromstring(zf.read(part_name))
+    except (zipfile.BadZipFile, KeyError, ET.ParseError):
+        return lines
+
+    note_tags = (qn("w:footnote"), qn("w:endnote"))
+    for note in root:
+        if note.tag not in note_tags:
+            continue
+        if note.get(qn("w:type")) in ("separator", "continuationSeparator"):
+            continue
+        for para in note.iter(qn("w:p")):
+            text = "".join(node.text or "" for node in para.iter(qn("w:t"))).strip()
+            if text:
+                lines.append(text)
+    return lines
+
+
+def _xlsx_to_text(content: bytes, suffix: str = ".xlsx") -> tuple[str, str]:
+    """Render a workbook as cell values plus the formulas behind them.
+
+    Returns the text and the recalculation outcome, one of ``cached`` (every
+    formula already carried a saved result), ``libreoffice`` (results were
+    computed here) or ``unavailable`` (formula cells have no value to show).
+
+    openpyxl has no formula engine, and it drops the value cache of any
+    workbook it saves, so a workbook the agent edited carries formulas with no
+    result. Those cells read as ``None`` and would reach the judge blank;
+    LibreOffice recalculates them first.
+    """
+    formula_text = _xlsx_formula_map(content)
+    values_source: bytes = content
+    recalc_status = "cached"
+
+    if formula_text and _xlsx_has_uncached_formulas(content, formula_text):
+        recalculated = _recalculate_xlsx(content, suffix)
+        if recalculated is None:
+            recalc_status = "unavailable"
+        else:
+            values_source = recalculated
+            recalc_status = "libreoffice"
+
+    wb = openpyxl.load_workbook(io.BytesIO(values_source), data_only=True)
+    try:
+        blocks: list[str] = []
+        if recalc_status == "unavailable":
+            blocks.append(
+                "=== Extraction Note ===\n"
+                "[formula results could not be computed: blank cells below may "
+                "be uncomputed formulas rather than missing values]"
+            )
+
+        for sheet in wb.worksheets:
+            rows: list[str] = []
+            formula_lines: list[str] = []
+            for row in sheet.iter_rows():
+                values: list[str] = []
+                for cell in row:
+                    # An explicit None test, because 0 and False are answers.
+                    values.append("" if cell.value is None else str(cell.value))
+                    formula = formula_text.get((sheet.title, cell.coordinate))
+                    if formula:
+                        formula_lines.append(f"{cell.coordinate}: {formula}")
+                if any(values):
+                    rows.append(" | ".join(values))
+
+            sheet_text = "\n".join(rows)
+            if formula_lines:
+                sheet_text += "\n\n=== Formulas ===\n" + "\n".join(formula_lines)
+            blocks.append(f"=== Sheet: {sheet.title} ===\n{sheet_text}")
+
+        return "\n\n".join(blocks), recalc_status
+    finally:
+        wb.close()
+
+
+def _xlsx_formula_map(content: bytes) -> dict[tuple[str, str], str]:
+    """Authored formula text of every formula cell, keyed by sheet and cell."""
+    wb = openpyxl.load_workbook(io.BytesIO(content), data_only=False, read_only=True)
+    try:
+        formulas: dict[tuple[str, str], str] = {}
+        for sheet_name in wb.sheetnames:
+            for row in wb[sheet_name].iter_rows():
+                for cell in row:
+                    coord = getattr(cell, "coordinate", None)
+                    if not coord:
+                        continue
+                    value = cell.value
+                    # Array formulas arrive as an object carrying .text.
+                    text = value if isinstance(value, str) else getattr(value, "text", None)
+                    if isinstance(text, str) and text.startswith("="):
+                        formulas[(sheet_name, coord)] = text
+        return formulas
+    finally:
+        wb.close()
+
+
+def _xlsx_has_uncached_formulas(
+    content: bytes, formula_text: dict[tuple[str, str], str]
+) -> bool:
+    """True when a formula cell has no saved result to read."""
+    wb = openpyxl.load_workbook(io.BytesIO(content), data_only=True, read_only=True)
+    try:
+        for sheet_name in wb.sheetnames:
+            for row in wb[sheet_name].iter_rows():
+                for cell in row:
+                    if cell.value is not None:
+                        continue
+                    coord = getattr(cell, "coordinate", None)
+                    if coord and (sheet_name, coord) in formula_text:
+                        return True
+        return False
+    finally:
+        wb.close()
+
+
+def _recalculate_xlsx(content: bytes, suffix: str = ".xlsx") -> bytes | None:
+    """Compute a workbook's formula results with headless LibreOffice.
+
+    Returns the recalculated workbook, or None when LibreOffice is missing or
+    the conversion fails. Everything is scoped to a private temporary
+    directory, including LibreOffice's user profile, so concurrent calls do
+    not contend.
+    """
+    soffice = shutil.which("soffice") or shutil.which("libreoffice")
+    if not soffice:
+        return None
+
+    with tempfile.TemporaryDirectory(prefix="xlsx_recalc_") as tmpdir:
+        tmp = Path(tmpdir)
+        source = tmp / f"workbook{suffix}"
+        source.write_bytes(content)
+        outdir = tmp / "out"
+        outdir.mkdir()
+        profile = tmp / "profile"
+
+        try:
+            result = subprocess.run(
+                [
+                    soffice,
+                    "--headless",
+                    "--calc",
+                    f"-env:UserInstallation=file://{profile}",
+                    "--convert-to",
+                    "xlsx",
+                    "--outdir",
+                    str(outdir),
+                    str(source),
+                ],
+                capture_output=True,
+                timeout=_RECALC_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return None
+
+        if result.returncode != 0:
+            return None
+
+        converted = outdir / f"{source.stem}.xlsx"
+        if not converted.exists():
+            return None
+        return converted.read_bytes()
+
+
+def _pptx_to_text(content: bytes) -> str:
+    """Render a deck as text: every shape, plus tables and speaker notes."""
+    prs = Presentation(io.BytesIO(content))
+    blocks: list[str] = []
+
+    for index, slide in enumerate(prs.slides, start=1):
+        lines: list[str] = []
+        for shape in slide.shapes:
+            lines.extend(_pptx_shape_lines(shape))
+
+        if slide.has_notes_slide:
+            notes = (slide.notes_slide.notes_text_frame.text or "").strip()
+            if notes:
+                lines.append(f"=== Speaker Notes ===\n{notes}")
+
+        blocks.append(f"=== Slide {index} ===\n" + "\n".join(lines))
+
+    return "\n\n".join(blocks)
+
+
+def _pptx_shape_lines(shape: Any) -> list[str]:
+    """Text of a shape, descending into groups and tables.
+
+    A group shape, a table and a chart all lack a ``.text`` attribute, so each
+    is handled by its own accessor rather than skipped.
+    """
+    lines: list[str] = []
+
+    # A shape whose type python-pptx cannot resolve still gets its plain text
+    # read below, so an unknown type never costs the whole slide.
+    try:
+        shape_type = shape.shape_type
+    except (ValueError, KeyError, AttributeError):
+        shape_type = None
+
+    if shape_type == MSO_SHAPE_TYPE.GROUP:
+        for child in shape.shapes:
+            lines.extend(_pptx_shape_lines(child))
+        return lines
+
+    if getattr(shape, "has_table", False):
+        for row in shape.table.rows:
+            cells = [cell.text.strip() for cell in row.cells]
+            if any(cells):
+                lines.append("\t".join(cells))
+        return lines
+
+    if getattr(shape, "has_chart", False):
+        chart = shape.chart
+        chart_lines = []
+        try:
+            if chart.has_title and chart.chart_title.has_text_frame:
+                chart_lines.append(chart.chart_title.text_frame.text.strip())
+            for series in chart.plots[0].series:
+                values = " | ".join(
+                    "" if v is None else str(v) for v in series.values
+                )
+                chart_lines.append(f"{series.name}: {values}")
+        except (ValueError, AttributeError, IndexError):
+            pass
+        if chart_lines:
+            lines.append("=== Chart ===\n" + "\n".join(chart_lines))
+        return lines
+
+    text = getattr(shape, "text", "")
+    if text and text.strip():
+        lines.append(text.strip())
+    return lines
+
+
+def _pdf_to_text(content: bytes) -> str:
+    """Render a PDF's text layer page by page."""
+    reader = PdfReader(io.BytesIO(content))
+    if reader.is_encrypted:
+        reader.decrypt("")
+
+    pages: list[str] = []
+    for index, page in enumerate(reader.pages, start=1):
+        try:
+            text = (page.extract_text() or "").strip()
+        except Exception as e:
+            text = f"[page text could not be extracted: {type(e).__name__}: {e}]"
+        pages.append(f"=== Page {index} ===\n{text}")
+
+    return "\n\n".join(pages)
