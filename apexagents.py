@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import io
 import json
-from typing import Any
+from typing import Any, Optional
 
 import openai
 from openreward.environments import JSONObject, TextBlock, ToolOutput, tool
@@ -21,6 +21,36 @@ if os.path.exists("/orwd_data"):
 else:
     PATH = Path(__file__).parent
 
+def resolve_expected_output(task: dict[str, Any]) -> Optional[str]:
+    """The submission route for a task, tolerating a null `expected_output`.
+
+    5/480 rows in tasks_and_rubrics.json leave `expected_output` null. Every one
+    of them has `gold_response_type == "text"`, and across the whole corpus
+    "text" holds for exactly the 417 `message_in_console` tasks while all 58
+    file-output tasks are "file" — so a null unambiguously means a console
+    task.
+
+    This matters beyond just not crashing. The submission gates compare against
+    the literal "message_in_console", so a null left in place routes these 5 to
+    `submit_files`: an agent that correctly reasons "this wants a console
+    message" gets its `submit_answer` rejected and has to fabricate a
+    spreadsheet to be graded at all (observed on task_6b27cc3ab9da428e — the
+    agent reasoned correctly, was refused, and wrote a throwaway .xlsx). That
+    grades the wrong artifact, so the reward for those tasks was meaningless
+    even once the session started.
+
+    A null with a non-"text" gold_response_type is a shape we have no rule for;
+    leave it alone so TaskSpec's Optional carries it rather than guessing which
+    of the six file types was meant.
+    """
+    expected = task.get("expected_output")
+    if expected:
+        return expected
+    if task.get("gold_response_type") == "text":
+        return "message_in_console"
+    return expected
+
+
 class TaskSpec(BaseModel):
     """Task specification for apex-agents tasks."""
 
@@ -28,7 +58,12 @@ class TaskSpec(BaseModel):
     domain: str
     world_id: str
     prompt: str
-    expected_output: str
+    # 5/480 rows in tasks_and_rubrics.json store a real None here. Typed as a
+    # required str this raised `500 ValidationError` at session init, so those
+    # tasks were unrunnable — the agent never even got a prompt. None already
+    # behaves correctly downstream (it is != "message_in_console", so submit_files
+    # is the accepted path), so tolerating it is enough; no other change needed.
+    expected_output: Optional[str] = None
 
 
 class SubmitAnswerInput(BaseModel):
@@ -68,6 +103,10 @@ class ApexAgents(CLIEnvironment):
         self.task_data = next(
             t for t in all_tasks if t["task_id"] == self.validated.task_id
         )
+        # The submission gates below read task_data["expected_output"] directly,
+        # so normalize here too — not just in the emitted task_spec — or the 5
+        # null rows keep routing to submit_files. See resolve_expected_output.
+        self.task_data["expected_output"] = resolve_expected_output(self.task_data)
 
         # Initialize OpenAI client for grading
         api_key = secrets.get("openai_api_key")
@@ -246,7 +285,7 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
             return ToolOutput(
                 blocks=[
                     TextBlock(
-                        text=f"This task expects '{self.task_data.expected_output}', not a console message. Use submit_files instead."
+                        text=f"This task expects '{self.task_data['expected_output']}', not a console message. Use submit_files instead."
                     )
                 ],
                 metadata={"error": "wrong_output_type"},
@@ -279,7 +318,7 @@ Use ls to explore the directory structure, then use the appropriate tool for eac
                 finished=True,
             )
 
-        if self.task_data.expected_output == "message_in_console":
+        if self.task_data["expected_output"] == "message_in_console":
             return ToolOutput(
                 blocks=[
                     TextBlock(
@@ -488,7 +527,7 @@ Does the submission meet this criterion? Provide brief reasoning (1-2 sentences)
                     "domain": t["domain"],
                     "world_id": t["world_id"],
                     "prompt": t["prompt"],
-                    "expected_output": t["expected_output"],
+                    "expected_output": resolve_expected_output(t),
                 }
             )
 
